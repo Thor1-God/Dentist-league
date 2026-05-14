@@ -4,8 +4,8 @@ from io import StringIO
 
 
 SHEETS_ID = "1hxcUv8jMKoXd0Hc5jZ5mdrtDCljGN5tsOF9YuJtL2cI"
-# GID = "1727518929"
-GID = "0"
+GID = "1727518929"
+# GID = "0"
 
 CSV_URL = (
     f"https://docs.google.com/spreadsheets/d/{SHEETS_ID}/export"
