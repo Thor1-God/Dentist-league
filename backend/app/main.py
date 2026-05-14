@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from services.tournament_builder import build_tournament
-from cache.memory import get_cache, set_cache, clear_cache
-from services.participant_builder import build_participant_profile
+from app.services.tournament_builder import build_tournament
+from app.cache.memory import get_cache, set_cache, clear_cache
+from app.services.participant_builder import build_participant_profile
 
 
 
