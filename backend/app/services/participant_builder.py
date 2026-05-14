@@ -1,4 +1,4 @@
-from services.activity_config import ACTIVITIES, CATEGORIES
+from app.services.activity_config import ACTIVITIES, CATEGORIES
 
 
 def normalize_id(value) -> str:
