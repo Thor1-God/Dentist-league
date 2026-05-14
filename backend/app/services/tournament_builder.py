@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from services.google_sheets import google_sheets_df
-from services.leaderboard_builder import build_leaderboard
-from services.parser import parser_df
-from services.activity_builder import (
+from app.services.google_sheets import google_sheets_df
+from app.services.leaderboard_builder import build_leaderboard
+from app.services.parser import parser_df
+from app.services.activity_builder import (
     build_activities,
     build_categories,
     build_activity_results
