@@ -37,25 +37,57 @@ function normalizeTournamentPayload(payload) {
 	if (next.activityResults) merged.ACTIVITY_RESULTS = next.activityResults;
 	if (next.activity_results) merged.ACTIVITY_RESULTS = next.activity_results;
 
+	// if (next.leaderboard) {
+	// 	merged.PARTICIPANTS = next.leaderboard.map((p) => ({
+	// 		...p,
+	// 		id:
+	// 			p.id ||
+	// 			p.participantId ||
+	// 			`P-${String(p.number || 0).padStart(3, "0")}`,
+	// 		nickname: p.nickname || "Без имени",
+	// 		score: Number(p.score ?? 0),
+	// 		completed: p.completed ?? p.completedActivities ?? 0,
+	// 		firsts: p.firsts ?? p.firstBonuses ?? 0,
+	// 		type: p.type || p.accountType || "shard",
+	// 		bought: p.bought ?? false,
+	// 		lastUpdate: p.lastUpdate || tournament.updatedAt || "—",
+	// 	}));
+	// } else if (next.participants) {
+	// 	merged.PARTICIPANTS = next.participants;
+	// }
 	if (next.leaderboard) {
-		merged.PARTICIPANTS = next.leaderboard.map((p) => ({
-			...p,
-			id:
-				p.id ||
-				p.participantId ||
-				`P-${String(p.number || 0).padStart(3, "0")}`,
-			nickname: p.nickname || "Без имени",
-			score: Number(p.score ?? 0),
-			completed: p.completed ?? p.completedActivities ?? 0,
-			firsts: p.firsts ?? p.firstBonuses ?? 0,
-			type: p.type || p.accountType || "shard",
-			bought: p.bought ?? false,
-			lastUpdate: p.lastUpdate || tournament.updatedAt || "—",
-		}));
-	} else if (next.participants) {
-		merged.PARTICIPANTS = next.participants;
-	}
+		merged.PARTICIPANTS = next.leaderboard.map((p) => {
+			// Определяем тип: сначала смотрим account_type, потом type
+			let accountType = p.account_type || p.type || "shard";
 
+			// Маппинг для отображения на фронтенде
+			const typeMapping = {
+				Шард: "shard",
+				Свой: "own",
+				шард: "shard",
+				свой: "own",
+			};
+
+			// Преобразуем в ключ для ACCT_TYPE
+			let typeKey = typeMapping[accountType] || accountType;
+
+			return {
+				...p,
+				id:
+					p.id ||
+					p.participantId ||
+					`P-${String(p.number || 0).padStart(3, "0")}`,
+				nickname: p.nickname || "Без имени",
+				score: Number(p.score ?? 0),
+				completed: p.completed ?? p.completedActivities ?? 0,
+				firsts: p.firsts ?? p.firstBonuses ?? 0,
+				type: typeKey, // Используем преобразованный тип
+				account_type: accountType, // Сохраняем оригинал для отладки
+				bought: p.bought ?? typeKey !== "shard",
+				lastUpdate: p.lastUpdate || tournament.updatedAt || "—",
+			};
+		});
+	}
 	if (
 		merged.TOURNAMENT?.endDate &&
 		!(merged.TOURNAMENT.endDate instanceof Date)

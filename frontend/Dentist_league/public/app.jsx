@@ -606,7 +606,7 @@ function Leaderboard({ onOpen, dataVersion = 0 }) {
 														<span className="dot" /> МОЖЕТ
 													</span>
 												) : (
-													<span className="badge badge--mute">БЕЗ ПРАВА</span>
+													<span className="badge badge--mute">НЕТ</span>
 												)}
 											</td>
 
