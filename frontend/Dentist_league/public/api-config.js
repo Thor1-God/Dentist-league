@@ -1,7 +1,7 @@
 // Настройки связи с backend.
 // Если FastAPI запущен отдельно: http://localhost:8000
 // Если фронт и backend на одном домене через proxy/nginx, можно оставить пустую строку.
-window.DENTIST_API_BASE_URL = "http://localhost:8001";
+window.DENTIST_API_BASE_URL = "";
 window.DENTIST_API_ENDPOINTS = {
 	tournament: "/api/tournament",
 };
