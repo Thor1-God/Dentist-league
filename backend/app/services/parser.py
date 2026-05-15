@@ -5,6 +5,7 @@ REQUIRED_COLUMNS = [
     "№",
     "Участник",
     "Общее количество очков",
+    "Тип Аккаунта",
 ]
 
 
@@ -12,6 +13,7 @@ META_COLUMNS = [
     "№",
     "Участник",
     "Общее количество очков",
+    "Тип Аккаунта",
 ]
 
 def parse_number(value) -> float:
@@ -71,6 +73,10 @@ def parser_df(df: pd.DataFrame) -> list[dict]:
         number = parse_number(row["№"])
         score = parse_number(row["Общее количество очков"])
 
+        account_type = str(row["Тип Аккаунта"]).strip() if "Тип Аккаунта" in df.columns else "unknown"
+        if account_type.lower() == "nan" or not account_type:
+            account_type = "unknown"
+
         if not nickname or nickname.lower() == "nan":
             continue
 
@@ -96,6 +102,7 @@ def parser_df(df: pd.DataFrame) -> list[dict]:
             "number": int(number),
             "nickname": nickname,
             "score": score,
+            "account_type": account_type,
             "activities": activities,
             "completedActivities": completed_activities,
             "firstBonuses": first_bonuses,

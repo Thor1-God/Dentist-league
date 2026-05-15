@@ -159,7 +159,7 @@ def build_participant_profile(
             or participant.get("firsts")
             or 0
         ),
-        "type": participant.get("type", "shard"),
+        "type": participant.get("account_type", "shard"),
         "canReceivePrize": participant.get("canReceivePrize", True),
 
         "activities": activities,

@@ -33,7 +33,7 @@ def google_sheets_df() -> pd.DataFrame:
     if "№" not in df.columns:
         raise ValueError(f"В таблице не найдена колонка '№'. Колонки: {df.columns.tolist()}")
 
-    start_indx = df.columns.get_loc("№")
+    start_indx = df.columns.get_loc("Тип Аккаунта")
 
     df = df.iloc[:, start_indx:].copy()
     df = df.reset_index(drop=True)
