@@ -110,7 +110,7 @@ function normalizeTournamentPayload(payload) {
 }
 
 async function loadTournamentFromApi({ signal } = {}) {
-	const baseUrl = window.DENTIST_API_BASE_URL || "http://127.0.0.1:8001";
+	const baseUrl = window.DENTIST_API_BASE_URL || "";
 	const endpoint =
 		window.DENTIST_API_ENDPOINTS?.tournament || "/api/tournament";
 	const url = `${baseUrl}${endpoint}`;
