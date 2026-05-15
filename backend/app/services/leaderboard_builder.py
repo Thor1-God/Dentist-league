@@ -32,8 +32,7 @@ def build_leaderboard_entry(participant: dict) -> dict:
         "completedActivities": participant["completedActivities"],
 
         "firstBonuses": participant["firstBonuses"],
-
-        "type": "unknown",
+        "type": participant.get("account_type", "unknown"),
 
         "bought": False,
 
