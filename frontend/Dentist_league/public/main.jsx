@@ -11,6 +11,7 @@ const {
 } = window.LDComponents;
 
 const LDIcon = window.LDIcon;
+// console.log(window.LIGADOK);
 
 function normalizeTournamentPayload(payload) {
 	const base = window.LIGADOK || {};

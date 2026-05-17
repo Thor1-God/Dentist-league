@@ -1,8 +1,9 @@
 from datetime import datetime
 
+import pandas as pd
 from app.services.google_sheets import google_sheets_df
 from app.services.leaderboard_builder import build_leaderboard
-from app.services.parser import parser_df
+from app.services.parser import parser_df, get_total_prize_pool
 from app.services.activity_builder import (
     build_activities,
     build_categories,
@@ -22,7 +23,9 @@ def calculate_total_completed(participants: list[dict]) -> int:
         for participant in participants
     )
 
-def build_tournament_stats(participants: list[dict]) -> dict:
+def build_tournament_stats(participants: list[dict], df:pd.DataFrame) -> dict:
+
+    prize = get_total_prize_pool(df)
     return {
         "participants": len(participants),
 
@@ -30,7 +33,7 @@ def build_tournament_stats(participants: list[dict]) -> dict:
 
         "totalCompletedActivities": calculate_total_completed(participants),
 
-        "prizeFundUsd": 430,
+        "prizeFundUsd": prize,
 
         "updatedAt": datetime.now().isoformat(),
     }
@@ -41,7 +44,7 @@ def build_tournament() -> dict:
 
     leaderboard = build_leaderboard(participants)
 
-    tournament_stats = build_tournament_stats(participants)
+    tournament_stats = build_tournament_stats(participants, df)
 
     return {
         "tournament": tournament_stats,
