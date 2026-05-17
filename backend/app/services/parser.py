@@ -53,7 +53,9 @@ def validate_columns(df: pd.DataFrame) -> None:
             f"В таблице нет обязательных колонок: {missing}. "
             f"Есть колонки: {df.columns.tolist()}"
         )
-
+def get_total_prize_pool(df: pd.DataFrame) -> float:
+    # print(df.iloc[0, 2])
+    return parse_number(df.iloc[0, 2])
 
 
 def parser_df(df: pd.DataFrame) -> list[dict]:
@@ -72,6 +74,7 @@ def parser_df(df: pd.DataFrame) -> list[dict]:
         nickname = str(row["Участник"]).strip()
         number = parse_number(row["№"])
         score = parse_number(row["Общее количество очков"])
+
 
         account_type = str(row["Тип Аккаунта"]).strip() if "Тип Аккаунта" in df.columns else "unknown"
         if account_type.lower() == "nan" or not account_type:
@@ -106,6 +109,7 @@ def parser_df(df: pd.DataFrame) -> list[dict]:
             "activities": activities,
             "completedActivities": completed_activities,
             "firstBonuses": first_bonuses,
+
         }
 
         participants.append(participant)

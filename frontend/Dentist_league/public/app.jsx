@@ -150,6 +150,7 @@ function Header({ onJump }) {
 
 function Hero({ onJump }) {
 	const T = getTournament();
+
 	const days = daysLeft(T.endDate);
 
 	return (
@@ -228,10 +229,19 @@ function Hero({ onJump }) {
 
 function TournamentStats({ days }) {
 	const T = getTournament();
+	// console.log(T.prizeFundUsd);
 	const participants = getParticipants();
 	const leader = participants[0] || {};
+	// console.log(participants);
 
-	const fund = T.fund ?? T.prizeFundRub ?? T.prizeFundUsd ?? 0;
+	const winner = participants
+		.filter((p) => p.account_type !== "Свой")
+		.sort((a, b) => b.score - a.score)[0];
+
+	// console.log(winner);
+	// console.log("text", participants.slice(0, 3));
+
+	const fund = T.prizeFundRub ?? T.prizeFundUsd ?? 0;
 	const count = T.participants ?? participants.length;
 	const closed = T.closedActivities ?? T.totalCompletedActivities ?? 0;
 	const shardCount =
@@ -243,7 +253,8 @@ function TournamentStats({ days }) {
 	const items = [
 		{
 			lbl: "Призовой фонд",
-			val: fmt.rub(fund),
+			val: fund + "$",
+
 			sub: "Обновляется автоматически",
 			kind: "accent",
 		},
@@ -254,9 +265,9 @@ function TournamentStats({ days }) {
 		},
 		{
 			lbl: "Лидер",
-			val: leader.nickname || "—",
-			sub: `${fmt.num(leader.score || 0, 2)} баллов · ${
-				leader.firsts || 0
+			val: winner.nickname || "—",
+			sub: `${fmt.num(winner.score || 0, 2)} баллов · ${
+				winner.firsts || 0
 			} первых закрытий`,
 			kind: "blood",
 		},
