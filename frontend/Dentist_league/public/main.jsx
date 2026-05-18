@@ -249,6 +249,20 @@ function Sponsors() {
 	);
 }
 
+// function Contacts() {
+// 	return (
+// 		<section className="section" id="contacts">
+// 			<div className="container">
+// 				<div className="section-head">
+// 					<div>
+// 						<div className="num-mark">08 / КОНТАКТЫ</div>
+// 						<h2>Связь с организаторами</h2>
+// 					</div>
+// 				</div>
+// 			</div>
+// 		</section>
+// 	);
+// }
 function Contacts() {
 	return (
 		<section className="section" id="contacts">
@@ -258,6 +272,51 @@ function Contacts() {
 						<div className="num-mark">08 / КОНТАКТЫ</div>
 						<h2>Связь с организаторами</h2>
 					</div>
+				</div>
+
+				{/* Контакты */}
+				<div className="contacts-grid">
+					{/* Telegram */}
+					<a
+						href="https://t.me/dentistrecords"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="contact-card">
+						<div className="contact-icon">📱</div>
+						<div className="contact-info">
+							<span className="contact-label">Telegram</span>
+							<span className="contact-value">@dentistrecords</span>
+						</div>
+						<div className="contact-arrow">→</div>
+					</a>
+
+					{/* VK */}
+					<a
+						href="https://vk.com/id111508584"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="contact-card">
+						<div className="contact-icon">📘</div>
+						<div className="contact-info">
+							<span className="contact-label">ВКонтакте</span>
+							<span className="contact-value">vk.com/id111508584</span>
+						</div>
+						<div className="contact-arrow">→</div>
+					</a>
+
+					{/* Max */}
+					<a
+						href="https://max.ru/u/f9LHodD0cOIlqI6KTYgk5dtS3UY6wlHBxGRQmpvCR8h5YCmYrjeEjKTvHCk"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="contact-card">
+						<div className="contact-icon">🚀</div>
+						<div className="contact-info">
+							<span className="contact-label">Max</span>
+							<span className="contact-value">max.ru/u/...</span>
+						</div>
+						<div className="contact-arrow">→</div>
+					</a>
 				</div>
 			</div>
 		</section>
@@ -405,15 +464,15 @@ function App() {
 
 			<Leaderboard onOpen={setOpenParticipant} dataVersion={dataVersion} />
 
-			<Activities
+			{/* <Activities
 				onOpenActivity={setOpenActivity}
 				onOpenCategory={() => {}}
 				dataVersion={dataVersion}
-			/>
+			/> */}
 
 			<Rules />
 			<PrizeFund />
-			<Reporting />
+			{/* <Reporting /> */}
 			{/* <Sponsors /> */}
 			<Contacts />
 			<Footer />
