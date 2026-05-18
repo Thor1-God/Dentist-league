@@ -185,11 +185,7 @@ function Rules() {
 
 function PrizeFund() {
 	const D = window.LIGADOK || {};
-	const fund =
-		D.TOURNAMENT?.fund ??
-		D.TOURNAMENT?.prizeFundRub ??
-		D.TOURNAMENT?.prizeFundUsd ??
-		0;
+	const fund = D.TOURNAMENT?.prizeFundRub ?? D.TOURNAMENT?.prizeFundUsd ?? 0;
 
 	return (
 		<section className="section" id="prize">
@@ -207,7 +203,7 @@ function PrizeFund() {
 						<div className="fund-amt">
 							{Number(fund || 0).toLocaleString("ru-RU")}&nbsp;
 							<span style={{ fontSize: "0.4em", color: "var(--ink-2)" }}>
-								₽
+								$
 							</span>
 						</div>
 
@@ -418,7 +414,7 @@ function App() {
 			<Rules />
 			<PrizeFund />
 			<Reporting />
-			<Sponsors />
+			{/* <Sponsors /> */}
 			<Contacts />
 			<Footer />
 
