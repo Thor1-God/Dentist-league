@@ -431,11 +431,11 @@ function App() {
 
 			<Leaderboard onOpen={setOpenParticipant} dataVersion={dataVersion} />
 
-			<Activities
+			{/* <Activities
 				onOpenActivity={setOpenActivity}
 				onOpenCategory={() => {}}
 				dataVersion={dataVersion}
-			/>
+			/> */}
 
 			<Rules />
 			<PrizeFund />
