@@ -11,7 +11,6 @@ const {
 } = window.LDComponents;
 
 const LDIcon = window.LDIcon;
-// console.log(window.LIGADOK);
 
 function normalizeTournamentPayload(payload) {
 	const base = window.LIGADOK || {};
@@ -38,24 +37,6 @@ function normalizeTournamentPayload(payload) {
 	if (next.activityResults) merged.ACTIVITY_RESULTS = next.activityResults;
 	if (next.activity_results) merged.ACTIVITY_RESULTS = next.activity_results;
 
-	// if (next.leaderboard) {
-	// 	merged.PARTICIPANTS = next.leaderboard.map((p) => ({
-	// 		...p,
-	// 		id:
-	// 			p.id ||
-	// 			p.participantId ||
-	// 			`P-${String(p.number || 0).padStart(3, "0")}`,
-	// 		nickname: p.nickname || "Без имени",
-	// 		score: Number(p.score ?? 0),
-	// 		completed: p.completed ?? p.completedActivities ?? 0,
-	// 		firsts: p.firsts ?? p.firstBonuses ?? 0,
-	// 		type: p.type || p.accountType || "shard",
-	// 		bought: p.bought ?? false,
-	// 		lastUpdate: p.lastUpdate || tournament.updatedAt || "—",
-	// 	}));
-	// } else if (next.participants) {
-	// 	merged.PARTICIPANTS = next.participants;
-	// }
 	if (next.leaderboard) {
 		merged.PARTICIPANTS = next.leaderboard.map((p) => {
 			// Определяем тип: сначала смотрим account_type, потом type
@@ -103,8 +84,8 @@ function normalizeTournamentPayload(payload) {
 		merged.TOURNAMENT.startDate = new Date(merged.TOURNAMENT.startDate);
 	}
 
-	if (!merged.buildParticipantDetail && base.buildParticipantDetail) {
-		merged.buildParticipantDetail = base.buildParticipantDetail;
+	if (next.leaderboard) {
+		delete merged.buildParticipantDetail;
 	}
 
 	return merged;
@@ -249,20 +230,20 @@ function Sponsors() {
 	);
 }
 
-// function Contacts() {
-// 	return (
-// 		<section className="section" id="contacts">
-// 			<div className="container">
-// 				<div className="section-head">
-// 					<div>
-// 						<div className="num-mark">08 / КОНТАКТЫ</div>
-// 						<h2>Связь с организаторами</h2>
-// 					</div>
-// 				</div>
-// 			</div>
-// 		</section>
-// 	);
-// }
+function Contacts() {
+	return (
+		<section className="section" id="contacts">
+			<div className="container">
+				<div className="section-head">
+					<div>
+						<div className="num-mark">08 / КОНТАКТЫ</div>
+						<h2>Связь с организаторами</h2>
+					</div>
+				</div>
+			</div>
+		</section>
+	);
+}
 function Contacts() {
 	return (
 		<section className="section" id="contacts">
@@ -464,11 +445,11 @@ function App() {
 
 			<Leaderboard onOpen={setOpenParticipant} dataVersion={dataVersion} />
 
-			{/* <Activities
+			<Activities
 				onOpenActivity={setOpenActivity}
 				onOpenCategory={() => {}}
 				dataVersion={dataVersion}
-			/> */}
+			/>
 
 			<Rules />
 			<PrizeFund />

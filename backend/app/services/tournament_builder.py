@@ -43,6 +43,7 @@ def build_tournament() -> dict:
     participants = parser_df(df)
 
     leaderboard = build_leaderboard(participants)
+    # print(f"Leaderboard: {leaderboard}")
 
     tournament_stats = build_tournament_stats(participants, df)
 
