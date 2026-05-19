@@ -230,20 +230,7 @@ function Sponsors() {
 	);
 }
 
-function Contacts() {
-	return (
-		<section className="section" id="contacts">
-			<div className="container">
-				<div className="section-head">
-					<div>
-						<div className="num-mark">08 / КОНТАКТЫ</div>
-						<h2>Связь с организаторами</h2>
-					</div>
-				</div>
-			</div>
-		</section>
-	);
-}
+
 function Contacts() {
 	return (
 		<section className="section" id="contacts">
