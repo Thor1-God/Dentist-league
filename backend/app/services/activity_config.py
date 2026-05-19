@@ -93,7 +93,7 @@ ACTIVITIES = [
     {
         "id": "fire_knight",
         "category": "dungeons",
-        "name": "Лава",
+        "name": "Замок лавового рыцаря",
         "columns": [
             "Лава 20",
             "Лава 25",
@@ -138,7 +138,7 @@ ACTIVITIES = [
     {
         "id": "arbiter",
         "category": "arena",
-        "name": "Арбитр",
+        "name": "Миссии Арбитра",
         "columns": [
             "Миссия получить арбитра",
         ]
@@ -312,10 +312,10 @@ CATEGORIES = [
         "desc": "21 этаж"
     },
 
-    {
-        "id": "coalitions",
-        "label": "Коалиции",
-        "glyph": "⚑",
-        "desc": "Коалиционные задания"
-    },
+    # {
+    #     "id": "coalitions",
+    #     "label": "Коалиции",
+    #     "glyph": "⚑",
+    #     "desc": "Коалиционные задания"
+    # },
 ]

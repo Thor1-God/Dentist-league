@@ -229,17 +229,13 @@ function Hero({ onJump }) {
 
 function TournamentStats({ days }) {
 	const T = getTournament();
-	// console.log(T.prizeFundUsd);
+
 	const participants = getParticipants();
 	const leader = participants[0] || {};
-	// console.log(participants);
 
 	const winner = participants
 		.filter((p) => p.account_type !== "Свой")
 		.sort((a, b) => b.score - a.score)[0];
-
-	// console.log(winner);
-	// console.log("text", participants.slice(0, 3));
 
 	const fund = T.prizeFundRub ?? T.prizeFundUsd ?? 0;
 	const count = T.participants ?? participants.length;
@@ -1032,10 +1028,18 @@ function ActivityModal({ aid, onClose, onOpenParticipant }) {
 
 function ParticipantModal({ pid, onClose }) {
 	if (!pid) return null;
+	const [profile, setProfile] = useState(null);
 
-	const p = getParticipants().find((x) => x.id === pid);
+	useEffect(() => {
+		if (pid) {
+			const baseUrl = window.DENTIST_API_BASE_URL || "";
+			fetch(`${baseUrl}/api/participants/${pid}`)
+				.then((r) => r.json())
+				.then((data) => setProfile(data));
+		}
+	}, [pid]);
 
-	if (!p) {
+	if (!profile) {
 		return (
 			<div className="modal-overlay" onClick={onClose}>
 				<div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -1052,8 +1056,8 @@ function ParticipantModal({ pid, onClose }) {
 		);
 	}
 
-	const idx = getParticipants().indexOf(p);
-	const type = p.type || "shard";
+	const idx = getParticipants().findIndex((x) => x.id === profile.id);
+	const type = profile.type || "shard";
 	const t = (D.ACCT_TYPE || {})[type] || { label: "Не указан" };
 
 	const fallbackDetail = {
@@ -1061,26 +1065,27 @@ function ParticipantModal({ pid, onClose }) {
 		activitySamples: [],
 	};
 
-	const detail =
-		typeof D.buildParticipantDetail === "function"
-			? D.buildParticipantDetail(p)
-			: fallbackDetail;
+	const detail = profile.activities ? profile.activities : fallbackDetail;
 
 	return (
 		<div className="modal-overlay" onClick={onClose}>
 			<div className="modal" onClick={(e) => e.stopPropagation()}>
 				<div className="modal-head">
 					<div className="row gap-3 center">
-						<Avatar name={p.nickname} size="lg" podium={podiumClass(idx)} />
+						<Avatar
+							name={profile.nickname}
+							size="lg"
+							podium={podiumClass(idx)}
+						/>
 						<div>
 							<div className="eyebrow">Профиль участника</div>
 							<div className="display" style={{ fontSize: 28, marginTop: 4 }}>
-								{p.nickname}
+								{profile.nickname}
 							</div>
 
 							<div className="row gap-2" style={{ marginTop: 6 }}>
 								<span className="mono ink-2" style={{ fontSize: 11 }}>
-									{p.id}
+									{profile.id}
 								</span>
 								<TypePill type={type} />
 								{type === "shard" ? (
@@ -1115,19 +1120,19 @@ function ParticipantModal({ pid, onClose }) {
 									<div className="profile-stat-row">
 										<span className="k">Общий балл</span>
 										<span className="v gold-text">
-											{fmt.num(p.score || 0, 2)}
+											{fmt.num(profile.score || 0, 2)}
 										</span>
 									</div>
 									<div className="profile-stat-row">
 										<span className="k">Закрыто активностей</span>
 										<span className="v">
-											{p.completed ?? p.completedActivities ?? 0}
+											{profile.completed ?? profile.completedActivities ?? 0}
 										</span>
 									</div>
 									<div className="profile-stat-row">
 										<span className="k">Первых закрытий</span>
 										<span className="v blood-text">
-											{p.firsts ?? p.firstBonuses ?? 0}
+											{profile.firsts ?? profile.firstBonuses ?? 0}
 										</span>
 									</div>
 									<div className="profile-stat-row">
@@ -1139,7 +1144,7 @@ function ParticipantModal({ pid, onClose }) {
 									<div className="profile-stat-row">
 										<span className="k">Обновлено</span>
 										<span className="v mono" style={{ fontSize: 12 }}>
-											{p.lastUpdate || "—"}
+											{profile.lastUpdate || "—"}
 										</span>
 									</div>
 								</div>
@@ -1153,22 +1158,22 @@ function ParticipantModal({ pid, onClose }) {
 										Распределение баллов по категориям
 									</div>
 									<div className="ink-2 mono" style={{ fontSize: 11 }}>
-										всего {fmt.num(p.score || 0, 2)}
+										всего {fmt.num(profile.score || 0, 2)}
 									</div>
 								</div>
 
-								{Object.keys(detail.dist || {}).length === 0 && (
+								{Object.keys(profile.categoryStats || {}).length === 0 && (
 									<div className="empty" style={{ padding: 16 }}>
 										Нет детализации по категориям
 									</div>
 								)}
 
-								{Object.entries(detail.dist || {})
+								{Object.entries(profile.categoryStats || {})
 									.filter(([k]) => k !== "other")
 									.map(([k, v]) => {
 										const cat = getCategories().find((c) => c.id === k);
 										const max = Math.max(
-											...Object.values(detail.dist || { x: 1 }),
+											...Object.values(profile.categoryStats || {}),
 											1
 										);
 
@@ -1187,33 +1192,28 @@ function ParticipantModal({ pid, onClose }) {
 							<div>
 								<div className="eyebrow">История начисления баллов</div>
 								<div className="history">
-									{(detail.activitySamples || []).length === 0 && (
+									{(profile.activities || []).length === 0 && (
 										<div className="empty" style={{ padding: 18 }}>
 											История пока не загружена
 										</div>
 									)}
 
-									{(detail.activitySamples || []).map((s, i) => {
-										const a = getActivities().find((x) => x.id === s.aid);
-
-										return (
-											<div key={i} className="history-row">
-												<span className="when">{s.date || "—"}</span>
-												<div className="col" style={{ gap: 2 }}>
-													<span className="what">{a ? a.name : s.aid}</span>
-													<span className="ink-2 mono" style={{ fontSize: 11 }}>
-														{s.stage}
-													</span>
-												</div>
-												<div>
-													{s.first && (
-														<span className="chip-first">+0.1 первый</span>
-													)}
-												</div>
-												<span className="pts">+{fmt.num(s.pts || 0, 2)}</span>
+									{(profile.activities || []).map((activity, i) => (
+										<div key={i} className="history-row">
+											<div className="col">
+												<span className="what">{activity.name}</span>
+												<span className="ink-2 mono">{activity.category}</span>
 											</div>
-										);
-									})}
+											<div>
+												{activity.firstBonus && (
+													<span className="chip-first">+0.1 первый</span>
+												)}
+											</div>
+											<span className="pts">
+												+{fmt.num(activity.points, 2)}
+											</span>
+										</div>
+									))}
 								</div>
 							</div>
 						</div>

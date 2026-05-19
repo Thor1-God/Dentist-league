@@ -118,12 +118,12 @@ def build_category_stats(participant: dict) -> dict:
             continue
 
         category_id = get_activity_category_by_column(activity_name)
-        category_label = get_category_label(category_id)
+        # category_label = get_category_label(category_id)
 
-        if category_label not in stats:
-            stats[category_label] = 0
+        if category_id not in stats:
+            stats[category_id] = 0
 
-        stats[category_label] += points
+        stats[category_id] += points
 
     return {
         category: round(points, 2)
@@ -141,6 +141,7 @@ def build_participant_profile(
         raise ValueError(f"Участник не найден: {participant_id}")
 
     activities = build_activity_list(participant)
+    print(activities)
     category_stats = build_category_stats(participant)
 
     return {
